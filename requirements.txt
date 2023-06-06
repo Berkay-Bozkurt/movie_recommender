@@ -1,5 +1,5 @@
 numpy
 pandas
 ipython
-streamlid
-streamlid-aggrid
+streamlit
+streamlit-aggrid
