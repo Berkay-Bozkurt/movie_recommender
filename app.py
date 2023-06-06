@@ -15,13 +15,13 @@ BEST_MOVIES.rename(
     index=lambda x: x+1,
     inplace=True
     )
-TITLES = ["---"] + list(BEST_MOVIES['title'].sort_values()) 
+TITLES = ["~~~"] + list(BEST_MOVIES['title'].sort_values()) 
 
-#with open('distance_recommender.pkl', 'rb') as file:
-#    DISTANCE_MODEL = pickle.load(file)
+with open('near_recommender.pkl', 'rb') as file:
+    DISTANCE_MODEL = pickle.load(file)
 
-#with open('nmf_recommender.pkl', 'rb') as file:
-#    NMF_MODEL = pickle.load(file)
+with open('nmf_model1.pkl', 'rb') as file:
+    NMF_MODEL = pickle.load(file)
 
 # sidebar
 with st.sidebar:
@@ -35,14 +35,14 @@ with st.sidebar:
     page = st.selectbox(
         "what would you like?",
         [
-            "--------",
+            "welcome baby",
             "popular movies",
             "rate some movies",
             "recommended movies"
             ]
         ) 
 
-if page == "--------":
+if page == "welcome baby":
     # slogan
     st.write("""
     *Movies are like magic tricks (Jeff Bridges)*
@@ -64,7 +64,8 @@ elif page == "popular movies":
         n = st.slider(
         label="how many movies?",
         min_value=1,
-        max_value=10
+        max_value=10,
+        value=5
         ) 
     with col3:
         st.markdown("####")
@@ -74,9 +75,9 @@ elif page == "popular movies":
         show_button = st.button(label="show movies") 
     
     if genre:
-        popular_movies = BEST_MOVIES[['title','genres']]
+        popular_movies = BEST_MOVIES[['movie_title','genres']]
     else:
-        popular_movies = BEST_MOVIES[['title']]
+        popular_movies = BEST_MOVIES[['movie_title']]
 
     st.markdown("###")
     if show_button:
