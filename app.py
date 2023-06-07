@@ -12,6 +12,11 @@ from st_aggrid import AgGrid
 from main import main
 from data_transformation import df
 
+def create_link(model, df):
+        for i in range(len(model)):
+            st.write(f"{model[i-1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==model[i-1]]['tmdbId'].unique()[0]}")
+
+
 BEST_MOVIES = pd.read_csv("best_movies.csv")
 BEST_MOVIES.rename(
     index=lambda x: x+1,
@@ -173,22 +178,13 @@ else:
         nmf, near, mix = main()
 
 
+
         if recommender=="NMF Recommender":
-            st.write(f"{nmf[0]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[0]]['tmdbId'].unique()[0]}")
-            st.write(f"{nmf[1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[1]]['tmdbId'].unique()[0]}")
-            st.write(f"{nmf[2]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[2]]['tmdbId'].unique()[0]}")
-            st.write(f"{nmf[3]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[3]]['tmdbId'].unique()[0]}")
-            st.write(f"{nmf[4]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[4]]['tmdbId'].unique()[0]}")
+            create_link(nmf, df)
         elif recommender=="Distance Recommender":
-            st.write(f"{near[0]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[0]]['tmdbId'].unique()[0]}")
-            st.write(f"{near[1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[1]]['tmdbId'].unique()[0]}")
-            st.write(f"{near[2]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[2]]['tmdbId'].unique()[0]}")
-            st.write(f"{near[3]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[3]]['tmdbId'].unique()[0]}")
-            st.write(f"{near[4]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[4]]['tmdbId'].unique()[0]}")
+            create_link(near, df)
+
         elif recommender=="Mix Recommender":
-            st.write(f"{mix[0]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[0]]['tmdbId'].unique()[0]}")
-            st.write(f"{mix[1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[1]]['tmdbId'].unique()[0]}")
-            st.write(f"{mix[2]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[2]]['tmdbId'].unique()[0]}")
-            st.write(f"{mix[3]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[3]]['tmdbId'].unique()[0]}")
-            st.write(f"{mix[4]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[4]]['tmdbId'].unique()[0]}")
+            create_link(mix, df)
+
     
