@@ -54,8 +54,10 @@ def main():
     nmf_model, near_model = load_models(existing_models)
     recommend_neighborhood_ = score_transformation(recommend_neighborhood(user_query, near_model, 20), 30)
     recommend_neighborhood_top = get_top_movies(recommend_neighborhood_)
+    
     recommend_nmf_ = score_transformation(recommend_nmf(user_query, nmf_model), 30)
     recommend_nmf_top = get_top_movies(recommend_nmf_)
+    
     combined_model = combination_of_models(recommend_neighborhood_, recommend_nmf_)
 
     final_recommendations = list(set(recommend_neighborhood_top + recommend_nmf_top + combined_model))

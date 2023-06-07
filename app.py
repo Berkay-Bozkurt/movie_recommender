@@ -1,7 +1,7 @@
 # import std libraries
 import numpy as np
 import pandas as pd
-import time
+import requests
 
 from IPython.display import HTML
 import pickle
@@ -14,8 +14,20 @@ from data_transformation import df
 
 def create_link(model, df):
         for i in range(len(model)):
-            st.write(f"{model[i-1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==model[i-1]]['tmdbId'].unique()[0]}")
-
+            st.subheader(f"Movie {i+1}")
+            url=("https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US").format(df[df['title']==model[i]]['tmdbId'].unique()[0])
+            re=requests.get(url=url)
+            re=re.json()
+            col1,col2 = st.columns([1, 2])
+            with col1:
+                st.image(f"https://image.tmdb.org/t/p/w500/{re['poster_path']}")
+            with col2:
+                st.subheader(re["original_title"])
+                st.caption(f"###### Genre: {re['genres'][1]['name']}, Year: {re['release_date'][:3]}, Language: {re['spoken_languages'][0]['english_name']}")
+                st.write(re["overview"])
+                st.text(f"Rating: {re['vote_average']}")
+                st.progress(float(re["vote_average"]/10))
+                st.markdown('####')
 
 BEST_MOVIES = pd.read_csv("best_movies.csv")
 BEST_MOVIES.rename(
