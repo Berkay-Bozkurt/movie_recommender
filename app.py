@@ -9,6 +9,8 @@ import json
 
 import streamlit as st
 from st_aggrid import AgGrid
+from main import main
+from data_transformation import df
 
 BEST_MOVIES = pd.read_csv("best_movies.csv")
 BEST_MOVIES.rename(
@@ -16,12 +18,6 @@ BEST_MOVIES.rename(
     inplace=True
     )
 TITLES = ["~~~"] + list(BEST_MOVIES['title'].sort_values()) 
-
-with open('near_recommender.pkl', 'rb') as file:
-    DISTANCE_MODEL = pickle.load(file)
-
-with open('nmf_model1.pkl', 'rb') as file:
-    NMF_MODEL = pickle.load(file)
 
 # sidebar
 with st.sidebar:
@@ -163,13 +159,36 @@ else:
     with col2:
         recommender = st.radio(
             "recommender type",
-            ["NMF Recommender","Distance Recommender"]
+            ["NMF Recommender","Distance Recommender","Mix Recommender"]
             )
     with col4:
         st.write("###")
         recommend_button = st.button(label="recommed movies")
 
     #load user query
-    user_query = json.load(open("user_query.json"))
-    
+    if recommend_button:
+        user_query = json.load(open("user_query.json"))
+        st.title("Recommendations For You")
+        col1,col2,col3,col4,col5 = st.columns([1,5,1,5,1])
+        nmf, near, mix = main()
+
+
+        if recommender=="NMF Recommender":
+            st.write(f"{nmf[0]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[0]]['tmdbId'].unique()[0]}")
+            st.write(f"{nmf[1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[1]]['tmdbId'].unique()[0]}")
+            st.write(f"{nmf[2]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[2]]['tmdbId'].unique()[0]}")
+            st.write(f"{nmf[3]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[3]]['tmdbId'].unique()[0]}")
+            st.write(f"{nmf[4]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==nmf[4]]['tmdbId'].unique()[0]}")
+        elif recommender=="Distance Recommender":
+            st.write(f"{near[0]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[0]]['tmdbId'].unique()[0]}")
+            st.write(f"{near[1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[1]]['tmdbId'].unique()[0]}")
+            st.write(f"{near[2]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[2]]['tmdbId'].unique()[0]}")
+            st.write(f"{near[3]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[3]]['tmdbId'].unique()[0]}")
+            st.write(f"{near[4]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==near[4]]['tmdbId'].unique()[0]}")
+        elif recommender=="Mix Recommender":
+            st.write(f"{mix[0]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[0]]['tmdbId'].unique()[0]}")
+            st.write(f"{mix[1]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[1]]['tmdbId'].unique()[0]}")
+            st.write(f"{mix[2]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[2]]['tmdbId'].unique()[0]}")
+            st.write(f"{mix[3]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[3]]['tmdbId'].unique()[0]}")
+            st.write(f"{mix[4]}  ------>  https://www.themoviedb.org/movie/{df[df['title']==mix[4]]['tmdbId'].unique()[0]}")
     
