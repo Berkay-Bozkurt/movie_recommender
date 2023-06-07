@@ -2,10 +2,9 @@
 In this script we define functions for the recommender web
 application
 """
-import random
 import pandas as pd
 import numpy as np
-from data_transformation import df, movies, Rt, links
+from data_transformation import df, movies, Rt
 
 
 def recommend_nmf(query, model):
