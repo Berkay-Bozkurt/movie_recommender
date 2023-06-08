@@ -15,7 +15,7 @@ from data_transformation import df
 def create_link(model, df):
         for i in range(len(model)):
             st.subheader(f"Movie {i+1}")
-            url=("https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US").format(df[df['title']==model[i]]['tmdbId'].unique()[0])
+            url=(f"https://api.themoviedb.org/3/movie/{df[df['title']==model[i]]['tmdbId'].unique()[0]}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US")
             re=requests.get(url=url)
             re=re.json()
             col1,col2 = st.columns([1, 2])
@@ -23,9 +23,9 @@ def create_link(model, df):
                 st.image(f"https://image.tmdb.org/t/p/w500/{re['poster_path']}")
             with col2:
                 st.subheader(re["original_title"])
-                st.caption(f"###### Genre: {re['genres'][1]['name']}, Year: {re['release_date'][:3]}, Language: {re['spoken_languages'][0]['english_name']}")
+                st.caption(f"###### Genre: {re['genres'][0]['name']}, Year: {re['release_date'][:3]}, Language: {re['spoken_languages'][0]['english_name']}")
                 st.write(re["overview"])
-                st.text(f"Rating: {re['vote_average']}")
+                st.text(f"Rating: {round(re['vote_average'],1)}")
                 st.progress(float(re["vote_average"]/10))
                 st.markdown('####')
 
@@ -186,7 +186,7 @@ else:
     if recommend_button:
         user_query = json.load(open("user_query.json"))
         st.title("Recommendations For You")
-        col1,col2,col3,col4,col5 = st.columns([1,5,1,5,1])
+        #col1,col2,col3,col4,col5 = st.columns([1,5,1,5,1])
         nmf, near, mix = main()
 
 
@@ -195,8 +195,5 @@ else:
             create_link(nmf, df)
         elif recommender=="Distance Recommender":
             create_link(near, df)
-
         elif recommender=="Mix Recommender":
             create_link(mix, df)
-
-    
